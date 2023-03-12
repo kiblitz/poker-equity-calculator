@@ -1,4 +1,5 @@
 #include <array>
+#include <string>
 
 namespace ranker {
   typedef unsigned ranking_t;
@@ -28,7 +29,30 @@ namespace ranker {
     Suit suit;
   } card_t;
 
-  typedef std::array<card_t, 5> hand_t;
+  namespace hand {
+    constexpr unsigned SIZE = 5;
+  }
 
-  ranking_t rank(hand_t hand);
+  typedef std::array<card_t, hand::SIZE> hand_t;
+
+  ranking_t l1_rank(hand_t hand);
+
+  namespace hand {
+    inline std::string to_string(hand_t hand) {
+      std::string s;
+      for (unsigned i = 0u; i < SIZE; ++i) {
+        const auto &value = hand[i].value;
+        const auto &suit = hand[i].suit;
+
+        const auto value_char = value == Card::ace ? 'a' : value == Card::king ? 'k' : value == Card::queen ? 'q' : value == Card::jack ? 'j' : (static_cast<char>(value) + '2');
+        const auto suit_str = suit == Suit::spade ? "s" : suit == Suit::heart ? "h" : suit == Suit::club ? "c" : suit == Suit::diamond ? "d" : "";
+        s += value_char;
+        s += suit_str;
+        if (i != SIZE - 1) {
+          s += ' ';
+        }
+      }
+      return s;
+    }
+  }
 }

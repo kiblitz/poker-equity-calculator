@@ -1,9 +1,10 @@
 #include <include/ranker.hpp>
 
 #include <array>
+#include <cassert>
 
 namespace ranker {
-  ranking_t rank(hand_t hand) {
+  ranking_t l1_rank(hand_t hand) {
     const unsigned short hand_set = 1u << hand[0].value | 1u << hand[1].value | 1u << hand[2].value | 1u << hand[3].value | 1u << hand[4].value;
 
     std::array<unsigned char, 13> hand_multiset{};
@@ -26,6 +27,10 @@ namespace ranker {
     classification -= (hand_set == 0x1f | hand_set == 0x3e | hand_set == 0x7c | hand_set == 0xf8 | hand_set == 0x1f0 | hand_set == 0x3e0 | hand_set == 0x7c0 | hand_set == 0xf80 | hand_set == 0x1f00 | hand_set == 0x100f) << 1;
 
     classification -= (hand[0].suit == hand[1].suit) & (hand[0].suit == hand[2].suit) & (hand[0].suit == hand[3].suit) & (hand[0].suit == hand[4].suit);
+
+    assert(classification < 10u && classification != 7u);
+    constexpr unsigned classification_permutation[10] = {7u, 8u, 4u, 5u, 0u, 1u, 2u, -1u, 3u, 6u};
+    classification = classification_permutation[classification];
 
     return classification;
   }
