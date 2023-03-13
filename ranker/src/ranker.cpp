@@ -28,4 +28,10 @@ namespace ranker {
 
     return classification;
   }
+
+  void simd_l1_rank(ranking_t *rankings, hand_t *hand) {
+    for (unsigned i = 0u; i < 8; ++i) {
+      rankings[i] = l1_rank(hand[i]);
+    }
+  }
 }

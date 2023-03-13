@@ -1,3 +1,5 @@
+#include <immintrin.h>
+
 #include <array>
 #include <string>
 
@@ -36,6 +38,7 @@ namespace ranker {
   typedef std::array<card_t, hand::SIZE> hand_t;
 
   ranking_t l1_rank(hand_t hand);
+  void simd_l1_rank(ranking_t *rankings, hand_t *hand);
 
   namespace hand {
     inline std::string to_string(hand_t hand) {
